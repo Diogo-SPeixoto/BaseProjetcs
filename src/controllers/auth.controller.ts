@@ -20,7 +20,8 @@ export async function loginHandler(req: FastifyRequest, res: FastifyReply) {
   res.setCookie("refreshToken", refreshToken, optionsRefreshToken);
 
   return res.status(200).send({
-    message: "Login realizado com sucesso",
+    accessToken: accessToken,
+    refreshToken: refreshToken
   });
 }
 
@@ -93,7 +94,8 @@ export async function refreshTokenHandler(
     res.setCookie("refreshToken", refreshToken, optionsRefreshToken);
 
     return res.status(200).send({
-      message: "Tokens renovados com sucesso",
+      accessToken: accessToken,
+      refreshToken: refreshToken
     });
   } catch (error) {
     const err: any = new Error("Invalid or missing authentication token.");

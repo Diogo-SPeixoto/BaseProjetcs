@@ -12,6 +12,7 @@ export async function createUserService({
   password: string;
 }) {
   const existingUser = await prisma.user.findUnique({ where: { email } });
+
   if (existingUser) {
     const error: any = new Error("User already exists");
     error.code = "USER_ALREADY_EXISTS";

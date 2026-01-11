@@ -20,7 +20,11 @@ export async function createUserHandler(req: FastifyRequest, res: FastifyReply) 
 
   res.setCookie("refreshToken", refreshToken, optionsRefreshToken);
 
-  return res.status(201).send(user);
+  return res.status(201).send({
+    user,
+    accessToken: accessToken,
+    refreshToken: refreshToken
+  });
 }
 
 export async function getMeHandler(req: FastifyRequest, res: FastifyReply) {

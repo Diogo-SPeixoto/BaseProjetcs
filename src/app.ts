@@ -4,6 +4,7 @@ import { ZodError } from "zod";
 import { usersRoutes } from "./routes/users";
 import jwtPlugin from "./plugins/jwt.js";
 import cookiePlugin from "./plugins/cookie.js";
+import corsPlugin from "./plugins/cors.js";
 import { ErrorCatalog } from "./errors";
 import { authRoutes } from "./routes/auth";
 import prismaPlugin from "./plugins/prisma";
@@ -13,6 +14,7 @@ type BusinessErrorCode = keyof typeof ErrorCatalog;
 export function buildApp() {
   const app = fastify();
 
+  app.register(corsPlugin);
   app.register(prismaPlugin);
   app.register(cookiePlugin);
   app.register(jwtPlugin);
@@ -32,7 +34,6 @@ export function buildApp() {
 
     // erros de negócio com código
     const code = (error as any).code as BusinessErrorCode | undefined;
-    console.log(code)
 
     if (code && Object.prototype.hasOwnProperty.call(ErrorCatalog, code)) {
       const dataError = ErrorCatalog[code];
@@ -45,7 +46,7 @@ export function buildApp() {
       return reply.status(dataError.status).send(dataError);
     }
 
-    req.log.error(error);
+    console.log(error)
     return reply.status(500).send({
       error: "Internal Server Error",
       message: "Unexpected error.",

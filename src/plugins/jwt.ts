@@ -13,13 +13,14 @@ const jwtPlugin = fp(async (app) => {
     secret: process.env.JWT_SECRET as string,
     cookie: {
       cookieName: "accessToken",
-      signed: true,
+      signed: false,
     },
   });
 
   app.decorate("authenticate", async (request: FastifyRequest,) => {
     try {
       await request.jwtVerify()
+
     } catch (err) {
       const error: any = new Error("Invalid or missing authentication token.");
       error.code = "INVALID_AUTH_TOKEN";
